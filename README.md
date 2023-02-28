@@ -24,22 +24,28 @@ failing test code was on.
 ```c
 #include "mut.h"
 
-mut_tests(test1) {
-  mut_assert('a' == 'a');
-}
-
-mut_tests(test2) {
+mut_test(mut_equal_example) {
   mut_equal(5, 5);
   mut_equal(5.5, 5.5);
-  mut_equal("hello mut", "hello MUT");
+  mut_equal("234", "5234");
 }
 
-int main(void) {
-  mut_run(test1, "mut_assert(expr) example");
+mut_test(mut_assert_example) {
+  mut_assert(2 == 2);
+  mut_assert(2 != 2);
+}
 
-  mut_run(test2, "mut_equal(result, expr) example");
+mut_group(mut_example) {
+  mut_add_test(mut_equal_example, "Mini-Unit_Test library `mut_equal()` example");
+  mut_add_test(mut_assert_example, "Mini-Unit-Test library `mut_assert()` example");
+}
 
-  mut_results();
+int main(int argc, char* argv[]) {
+  mut_init("Mini-Unit-Test example");
+
+  mut_add_group(mut_example, "Mini-Unit-Test library example");
+
+  mut_all_results();
 
   return 0;
 }
@@ -47,14 +53,26 @@ int main(void) {
 
 That produces the following output:
 ```text
-test1 (mut_assert(expr) example):
--- pass: 1                    fail: 0                    time: 0 ms
+****************************************************
+               Mini-Unit-Test example
+****************************************************
 
-test2 (mut_equal(result, expr) example):
-    readme.c:10 ("hello mut" != "hello MUT")
--- pass: 2                    fail: 1                    time: 0 ms
+mut_example ("Mini-Unit-Test library example"):
+    mut_equal_example ("Mini-Unit_Test library `mut_equal()` example"):
+        example.c:66 ("234" != "5234")
+    -- pass: 2          fail: 1          time: 0 ms
 
-ALL TESTS PASSED (3/4)
+    mut_assert_example ("Mini-Unit-Test library `mut_assert()` example"):
+        example.c:71 (2 != 2)
+    -- pass: 1          fail: 1          time: 0 ms
+
+tests passed (3/5)
+
+****************************************************
+
+           TESTS PASSED (3/5) time: 0 ms
+
+****************************************************
 ```
 
 ## Hints
