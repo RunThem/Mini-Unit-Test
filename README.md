@@ -48,13 +48,13 @@ int main(void) {
 That produces the following output:
 ```text
 test1 (mut_assert(expr) example):
--- pass: 0                    fail: 0                    time: 0 ms
+-- pass: 1                    fail: 0                    time: 0 ms
 
 test2 (mut_equal(result, expr) example):
     readme.c:10 ("hello mut" != "hello MUT")
 -- pass: 2                    fail: 1                    time: 0 ms
 
-ALL TESTS PASSED (2/3)
+ALL TESTS PASSED (3/4)
 ```
 
 ## Hints
