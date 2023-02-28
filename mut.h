@@ -113,28 +113,31 @@ static size_t lfails = 0;
     }                                                                                              \
   } while (0)
 
+#define _red(s)   "\033[31m" s "\033[0m"
+#define _green(s) "\033[32m" s "\033[0m"
+#define _blue(s)  "\033[34m" s "\033[0m"
+
 /* run a test. */
-#define mut_run(test, comment)                                                                        \
-  do {                                                                                                \
-    const size_t ts     = ltests;                                                                     \
-    const size_t fs     = lfails;                                                                     \
-    const clock_t start = clock();                                                                    \
-    printf("%s (%s):\n", #test, comment);                                                             \
-    test();                                                                                           \
-    printf(                                                                                           \
-        "-- pass: \033[32m%-20zu\033[0m fail: \033[31m%-20zu\033[0m time: \033[34m%ld\033[0m ms\n\n", \
-        (ltests - ts) - (lfails - fs),                                                                \
-        lfails - fs,                                                                                  \
-        (long)((clock() - start) * 1000 / CLOCKS_PER_SEC));                                           \
+#define mut_run(test, comment)                                                                     \
+  do {                                                                                             \
+    const size_t ts     = ltests;                                                                  \
+    const size_t fs     = lfails;                                                                  \
+    const clock_t start = clock();                                                                 \
+    printf("%s (%s):\n", #test, comment);                                                          \
+    test();                                                                                        \
+    printf("-- pass: " _green("%-20zu") " fail: " _red("%-20zu") " time: " _blue("%ld") " ms\n\n", \
+           (ltests - ts) - (lfails - fs),                                                          \
+           lfails - fs,                                                                            \
+           (long)((clock() - start) * 1000 / CLOCKS_PER_SEC));                                     \
   } while (0)
 
 /* display the test results. */
 #define mut_results()                                                                              \
   do {                                                                                             \
     if (lfails == 0) {                                                                             \
-      printf("ALL TESTS PASSED (\033[32m%zu\033[0m/%zu)\n", ltests, ltests);                       \
+      printf("ALL TESTS PASSED (" _green("%zu") "/%zu)\n", ltests, ltests);                        \
     } else {                                                                                       \
-      printf("SOME TESTS FAILED (\033[32m%zu\033[0m/%zu)\n", ltests - lfails, ltests);             \
+      printf("SOME TESTS FAILED ("_green("%zu") "/%zu)\n", ltests - lfails, ltests);               \
     }                                                                                              \
   } while (0)
 
