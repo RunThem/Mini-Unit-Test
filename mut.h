@@ -108,7 +108,9 @@ static size_t lfails = 0;
 /* assert a true statement. */
 #define mut_assert(expr)                                                                           \
   do {                                                                                             \
+    ++ltests;                                                                                      \
     if (!(expr)) {                                                                                 \
+      ++lfails;                                                                                    \
       printf("\t%s:%d (%s)\n", __FILE__, __LINE__, #expr);                                         \
     }                                                                                              \
   } while (0)
