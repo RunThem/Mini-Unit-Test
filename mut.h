@@ -131,7 +131,7 @@ typedef struct {
   printf("%*s\n", (int)(_ps_s + strlen(msg)) / 2, msg);                                            \
   printf(_ps "\n\n");
 
-#define mut_test(func)        static void T_##func(__mut_result_t* result)
+#define mut_test(func)        void T_##func(__mut_result_t* result)
 #define mut_extern_test(func) extern void T_##func(__mut_result_t* result)
 #define mut_add_test(func, comment)                                                                \
   do {                                                                                             \
@@ -148,7 +148,7 @@ typedef struct {
     result->fails += _result.fails;                                                                \
   } while (0)
 
-#define mut_group(func)        static void G_##func(__mut_result_t* result)
+#define mut_group(func)        void G_##func(__mut_result_t* result)
 #define mut_extern_group(func) extern void G_##func(__mut_result_t* result)
 #define mut_add_group(func, comment)                                                               \
   do {                                                                                             \
