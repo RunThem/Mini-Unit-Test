@@ -23,63 +23,63 @@ extern "C" {
 #  define MUT_FLOAT_TOLERANCE (0.00001)
 #endif /* !MUT_FLOAT_TOLERANCE */
 
-static inline bool mut_equal_signed_integer(intmax_t a, intmax_t b) {
+static inline bool __integer(intmax_t a, intmax_t b) {
   return a == b;
 }
 
-static inline bool mut_equal_unsigned_integer(uintmax_t a, uintmax_t b) {
+static inline bool __uninteger(uintmax_t a, uintmax_t b) {
   return a == b;
 }
 
-static inline bool mut_equal_pointer(void* a, void* b) {
+static inline bool __pointer(void* a, void* b) {
   return a == b;
 }
 
-static inline bool mut_equal_float(float a, float b) {
+static inline bool __float(float a, float b) {
   return fabsf(a - b) <= MUT_FLOAT_TOLERANCE;
 }
 
-static inline bool mut_equal_string(const char* a, const char* b) {
+static inline bool __string(const char* a, const char* b) {
   return !strcmp(a, b);
 }
 
 /* clang-format off */
-#define _mut_equal(a, b) _Generic((a),                                                           \
-char                    : mut_equal_signed_integer,                                              \
-_Bool                   : mut_equal_unsigned_integer,                                            \
-signed char             : mut_equal_signed_integer,                                              \
-unsigned char           : mut_equal_unsigned_integer,                                            \
-signed short int        : mut_equal_signed_integer,                                              \
-unsigned short int      : mut_equal_unsigned_integer,                                            \
-signed int              : mut_equal_signed_integer,                                              \
-unsigned int            : mut_equal_unsigned_integer,                                            \
-signed long int         : mut_equal_signed_integer,                                              \
-unsigned long int       : mut_equal_unsigned_integer,                                            \
-signed long long int    : mut_equal_signed_integer,                                              \
-unsigned long long int  : mut_equal_unsigned_integer,                                            \
-void*                   : mut_equal_pointer,                                                     \
-float                   : mut_equal_float,                                                       \
-double                  : mut_equal_float,                                                       \
-long double             : mut_equal_float,                                                       \
-char*                   : mut_equal_string)(a, b)
+#define _mut_equal(a, b) _Generic((a),                                                             \
+char                    : __integer,                                                               \
+_Bool                   : __uninteger,                                                             \
+signed char             : __integer,                                                               \
+unsigned char           : __uninteger,                                                             \
+signed short int        : __integer,                                                               \
+unsigned short int      : __uninteger,                                                             \
+signed int              : __integer,                                                               \
+unsigned int            : __uninteger,                                                             \
+signed long int         : __integer,                                                               \
+unsigned long int       : __uninteger,                                                             \
+signed long long int    : __integer,                                                               \
+unsigned long long int  : __uninteger,                                                             \
+void*                   : __pointer,                                                               \
+float                   : __float,                                                                 \
+double                  : __float,                                                                 \
+long double             : __float,                                                                 \
+char*                   : __string)(a, b)
 
-#define _mut_type_fmt(a) _Generic((a),                                                            \
-char                    : "\'%c\'",                                                               \
-_Bool                   : "%d",                                                                   \
-signed char             : "%hhd",                                                                 \
-unsigned char           : "%hhu",                                                                 \
-signed short int        : "%hd",                                                                  \
-unsigned short int      : "%hu",                                                                  \
-signed int              : "%d",                                                                   \
-unsigned int            : "%u",                                                                   \
-signed long int         : "%ld",                                                                  \
-unsigned long int       : "%lu",                                                                  \
-signed long long int    : "%lld",                                                                 \
-unsigned long long int  : "%llu",                                                                 \
-void*                   : "%p",                                                                   \
-float                   : "%lf",                                                                  \
-double                  : "%lf",                                                                  \
-long double             : "%Lf",                                                                  \
+#define _mut_type_fmt(a) _Generic((a),                                                             \
+char                    : "\'%c\'",                                                                \
+_Bool                   : "%d",                                                                    \
+signed char             : "%hhd",                                                                  \
+unsigned char           : "%hhu",                                                                  \
+signed short int        : "%hd",                                                                   \
+unsigned short int      : "%hu",                                                                   \
+signed int              : "%d",                                                                    \
+unsigned int            : "%u",                                                                    \
+signed long int         : "%ld",                                                                   \
+unsigned long int       : "%lu",                                                                   \
+signed long long int    : "%lld",                                                                  \
+unsigned long long int  : "%llu",                                                                  \
+void*                   : "%p",                                                                    \
+float                   : "%lf",                                                                   \
+double                  : "%lf",                                                                   \
+long double             : "%Lf",                                                                   \
 char*                   : "\"%s\"")
 /* clang-format on */
 
