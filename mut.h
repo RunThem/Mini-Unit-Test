@@ -83,20 +83,26 @@ long double             : "%Lf",                                                
 char*                   : "\"%s\"")
 /* clang-format on */
 
-static size_t ltests = 0;
-static size_t lfails = 0;
+#define _grey(s)   "\033[30;1m" s "\033[0m"
+#define _red(s)    "\033[31m" s "\033[0m"
+#define _green(s)  "\033[32m" s "\033[0m"
+#define _yellow(s) "\033[33m" s "\033[0m"
+#define _blue(s)   "\033[34m" s "\033[0m"
 
-#define mut_tests(name) static void name(void)
+typedef struct {
+  size_t tests;
+  size_t fails;
+} __mut_result_t;
 
 /* prototype to assert equal. */
 #define mut_equal(a, b)                                                                            \
   do {                                                                                             \
-    ++ltests;                                                                                      \
+    ++(result->tests);                                                                             \
     if (!_mut_equal(a, b)) {                                                                       \
-      ++lfails;                                                                                    \
+      ++(result->fails);                                                                           \
       char fmt[72] = {0};                                                                          \
       sprintf(fmt,                                                                                 \
-              "\t%s:%d (%s != %s)\n",                                                              \
+              "        " _grey("%s:%d") " (%s != %s)\n",                                           \
               __FILE__,                                                                            \
               __LINE__,                                                                            \
               _mut_type_fmt(a),                                                                    \
@@ -108,39 +114,67 @@ static size_t lfails = 0;
 /* assert a true statement. */
 #define mut_assert(expr)                                                                           \
   do {                                                                                             \
-    ++ltests;                                                                                      \
+    ++(result->tests);                                                                             \
     if (!(expr)) {                                                                                 \
-      ++lfails;                                                                                    \
-      printf("\t%s:%d (%s)\n", __FILE__, __LINE__, #expr);                                         \
+      ++(result->fails);                                                                           \
+      printf("        " _grey("%s:%d") " (%s)\n", __FILE__, __LINE__, #expr);                      \
     }                                                                                              \
   } while (0)
 
-#define _red(s)   "\033[31m" s "\033[0m"
-#define _green(s) "\033[32m" s "\033[0m"
-#define _blue(s)  "\033[34m" s "\033[0m"
+#define _ps   "****************************************************"
+#define _ps_s (sizeof(_ps) - 1)
 
-/* run a test. */
-#define mut_run(test, comment)                                                                     \
+#define mut_init(msg)                                                                              \
+  __mut_result_t result = {0};                                                                     \
+  clock_t start         = clock();                                                                 \
+  printf(_ps "\n");                                                                                \
+  printf("%*s\n", (int)(_ps_s + strlen(msg)) / 2, msg);                                            \
+  printf(_ps "\n\n");
+
+#define mut_test(func)        static void T_##func(__mut_result_t* result)
+#define mut_extern_test(func) extern void T_##func(__mut_result_t* result)
+#define mut_add_test(func, comment)                                                                \
   do {                                                                                             \
-    const size_t ts     = ltests;                                                                  \
-    const size_t fs     = lfails;                                                                  \
-    const clock_t start = clock();                                                                 \
-    printf("%s (%s):\n", #test, comment);                                                          \
-    test();                                                                                        \
-    printf("-- pass: " _green("%-20zu") " fail: " _red("%-20zu") " time: " _blue("%ld") " ms\n\n", \
-           (ltests - ts) - (lfails - fs),                                                          \
-           lfails - fs,                                                                            \
+    printf("    %s (" _yellow("\"%s\"") "):\n", #func, comment);                                   \
+    const clock_t start    = clock();                                                              \
+    __mut_result_t _result = {0};                                                                  \
+    T_##func(&_result);                                                                            \
+    printf("    -- pass: " _green("%-10zu") " fail: " _red("%-10zu") " time: " _blue(              \
+               "%ld") " ms\n\n",                                                                   \
+           _result.tests - _result.fails,                                                          \
+           _result.fails,                                                                          \
            (long)((clock() - start) * 1000 / CLOCKS_PER_SEC));                                     \
+    result->tests += _result.tests;                                                                \
+    result->fails += _result.fails;                                                                \
   } while (0)
 
-/* display the test results. */
-#define mut_results()                                                                              \
+#define mut_group(func)        static void G_##func(__mut_result_t* result)
+#define mut_extern_group(func) extern void G_##func(__mut_result_t* result)
+#define mut_add_group(func, comment)                                                               \
   do {                                                                                             \
-    if (lfails == 0) {                                                                             \
-      printf("ALL TESTS PASSED (" _green("%zu") "/%zu)\n", ltests, ltests);                        \
-    } else {                                                                                       \
-      printf("SOME TESTS FAILED ("_green("%zu") "/%zu)\n", ltests - lfails, ltests);               \
-    }                                                                                              \
+    printf("%s ("_yellow("\"%s\"") "): \n", #func, comment);                                       \
+    __mut_result_t _result = {0};                                                                  \
+    G_##func(&_result);                                                                            \
+    printf("tests passed (" _green("%zu") "/%zu)\n\n",                                             \
+           _result.tests - _result.fails,                                                          \
+           _result.tests);                                                                         \
+    result.tests += _result.tests;                                                                 \
+    result.fails += _result.fails;                                                                 \
+  } while (0)
+
+#define mut_all_results()                                                                          \
+  do {                                                                                             \
+    size_t n      = 0;                                                                             \
+    char buf[150] = {0};                                                                           \
+    printf(_ps "\n\n");                                                                            \
+    n = snprintf(buf,                                                                              \
+                 sizeof(buf),                                                                      \
+                 "TESTS PASSED (" _green("%zu") "/%zu) time: " _blue("%ld") " ms",                 \
+                 result.tests - result.fails,                                                      \
+                 result.tests,                                                                     \
+                 (long)((clock() - start) * 1000 / CLOCKS_PER_SEC));                               \
+    printf("%*s\n\n", (int)(_ps_s + n + 18) / 2, buf);                                             \
+    printf(_ps "\n");                                                                              \
   } while (0)
 
 #ifdef __cplusplus
