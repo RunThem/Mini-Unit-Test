@@ -56,52 +56,60 @@ mut_tests(test_mut) {
   for (size_t i = 0; i < 100000000; i++) { }
 
   /** output:
-   * test_mut (test mini unit test library):
-   *     example.c:37 ('1' != '2')
-   *     example.c:38 (1 != 0)
-   *     example.c:40 (127 != 126)
-   *     example.c:41 (255 != 254)
-   *     example.c:42 (32767 != 32766)
-   *     example.c:43 (65535 != 65534)
-   *     example.c:44 (2147483647 != 2147483646)
-   *     example.c:45 (4294967295 != 4294967294)
-   *     example.c:46 (9223372036854775807 != 9223372036854775806)
-   *     example.c:47 (18446744073709551615 != 18446744073709551614)
-   *     example.c:48 (9223372036854775807 != 9223372036854775806)
-   *     example.c:49 (18446744073709551615 != 18446744073709551614)
-   *     example.c:51 (0x7ffc928d92e8 != 0x7ffc928d92e0)
-   *     example.c:53 (100000.000000 != 99999.000000)
-   *     example.c:54 (100000.000000 != 99999.000000)
-   *     example.c:55 (100000.000000 != 99999.000000)
-   *     example.c:57 ("hello mut" != "hello MUT")
-   * -- pass: 17                   fail: 17                   time: 130 ms
-   *
+   * test_mut (test Mini-Unit-Test library):
+   *     example.c:34 ('1' != '2')
+   *     example.c:35 (1 != 0)
+   *     example.c:37 (127 != 126)
+   *     example.c:38 (255 != 254)
+   *     example.c:39 (32767 != 32766)
+   *     example.c:40 (65535 != 65534)
+   *     example.c:41 (2147483647 != 2147483646)
+   *     example.c:42 (4294967295 != 4294967294)
+   *     example.c:43 (9223372036854775807 != 9223372036854775806)
+   *     example.c:44 (18446744073709551615 != 18446744073709551614)
+   *     example.c:45 (9223372036854775807 != 9223372036854775806)
+   *     example.c:46 (18446744073709551615 != 18446744073709551614)
+   *     example.c:48 (0x7fffe042ace8 != 0x7fffe042ace0)
+   *     example.c:50 (100000.000000 != 99999.000000)
+   *     example.c:51 (100000.000000 != 99999.000000)
+   *     example.c:52 (100000.000000 != 99999.000000)
+   *     example.c:54 ("hello mut" != "hello MUT")
+   * -- pass: 17                   fail: 17                   time: 171 ms
    **/
 }
 
-mut_tests(mut_example) {
+mut_tests(mut_equal_example) {
   mut_equal(5, 5);
   mut_equal(5.5, 5.5);
   mut_equal("234", "5234");
 
-  mut_assert(2 != 2);
-
   /** output:
-   * mut_example (mini unit test library example):
-   *     example.c:88 ("234" != "5234")
-         example.c:90 (2 != 2)
+   * mut_equal_example (Mini-Unit_Test library `mut_equal()` example):
+   *     example.c:85 ("234" != "5234")
    * -- pass: 2                    fail: 1                    time: 0 ms
    **/
 }
 
+mut_tests(mut_assert_example) {
+  mut_assert(2 == 2);
+  mut_assert(2 != 2);
+
+  /** output:
+   * mut_assert_example (Mini-Unit-Test library `mut_assert()` example):
+   *     example.c:96 (2 != 2)
+   * -- pass: 1                    fail: 1                    time: 0 ms
+   **/
+}
+
 int main(int argc, char* argv[]) {
-  mut_run(test_mut, "test mini unit test library");
-  mut_run(mut_example, "mini unit test library example");
+  mut_run(test_mut, "test Mini-Unit-Test library");
+  mut_run(mut_equal_example, "Mini-Unit_Test library `mut_equal()` example");
+  mut_run(mut_assert_example, "Mini-Unit-Test library `mut_assert()` example");
 
   mut_results();
 
   /** output:
-   * SOME TESTS FAILED (19/37)
+   * SOME TESTS FAILED (20/39)
    **/
 
   return 0;
