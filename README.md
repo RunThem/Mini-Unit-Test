@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
   mut_add_group(mut_example, "Mini-Unit-Test library example");
 
-  mut_all_results();
+  mut_results();
 
   return 0;
 }
