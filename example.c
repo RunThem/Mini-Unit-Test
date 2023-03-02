@@ -71,9 +71,23 @@ mut_test(mut_assert_example) {
   mut_assert(2 != 2);
 }
 
+mut_test(mut_bench_example) {
+
+  mut_bench("malloc() & free()", {
+    void* ptr = malloc(sizeof(int));
+    free(ptr);
+  });
+
+  mut_bench("malloc()", {
+    mut_blank_line(); /* only used to format to look good. */
+    malloc(sizeof(int));
+  });
+}
+
 mut_group(mut_example) {
   mut_add_test(mut_equal_example, "Mini-Unit_Test library `mut_equal()` example");
   mut_add_test(mut_assert_example, "Mini-Unit-Test library `mut_assert()` example");
+  mut_add_test(mut_bench_example, "Mini-Unit-Test library `mut_bench()` example");
 }
 
 mut_extern_group(mut_example);
@@ -83,7 +97,7 @@ int main(int argc, char* argv[]) {
   mut_add_group(mut_test, "Mini-Unit-Test library test case");
   mut_add_group(mut_example, "Mini-Unit-Test library example");
 
-  mut_all_results();
+  mut_results();
   return 0;
 }
 
