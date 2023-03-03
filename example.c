@@ -90,7 +90,7 @@ mut_group(mut_example) {
   mut_add_test(mut_bench_example, "Mini-Unit-Test library `mut_bench()` example");
 }
 
-mut_extern_group(mut_example);
+mut_extern(mut_example);
 int main(int argc, char* argv[]) {
   mut_init("Mini-Unit-Test example");
 
