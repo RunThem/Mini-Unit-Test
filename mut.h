@@ -28,7 +28,7 @@ typedef struct {
 #define mut_assert(expr)                                                                           \
   do {                                                                                             \
     ++(result->tests);                                                                             \
-    if (expr) {                                                                                    \
+    if (!(expr)) {                                                                                 \
       ++(result->fails);                                                                           \
       __dis("        %s:%d (%s)", __FILE__, __LINE__, #expr);                                      \
     }                                                                                              \
