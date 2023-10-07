@@ -24,19 +24,12 @@ failing test code was on.
 ```c
 #include "mut.h"
 
-mut_test(mut_equal_example) {
-  mut_equal(5, 5);
-  mut_equal(5.5, 5.5);
-  mut_equal("234", "5234");
-}
-
 mut_test(mut_assert_example) {
   mut_assert(2 == 2);
   mut_assert(2 != 2);
 }
 
 mut_group(mut_example) {
-  mut_add_test(mut_equal_example, "Mini-Unit_Test library `mut_equal()` example");
   mut_add_test(mut_assert_example, "Mini-Unit-Test library `mut_assert()` example");
 }
 
@@ -56,22 +49,15 @@ That produces the following output:
 ****************************************************
                Mini-Unit-Test example
 ****************************************************
-
 mut_example ("Mini-Unit-Test library example"):
-    mut_equal_example ("Mini-Unit_Test library `mut_equal()` example"):
-        example.c:66 ("234" != "5234")
-    -- pass: 2          fail: 1          time: 0 ms
-
     mut_assert_example ("Mini-Unit-Test library `mut_assert()` example"):
         example.c:71 (2 != 2)
-    -- pass: 1          fail: 1          time: 0 ms
+    -- pass: 1          fail: 1
 
-tests passed (3/5)
+tests passed (1/2)
 
 ****************************************************
-
-           TESTS PASSED (3/5) time: 0 ms
-
+           TESTS PASSED (1/2)
 ****************************************************
 ```
 
