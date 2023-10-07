@@ -4,8 +4,6 @@
 
 #include "mut.h"
 
-#include <string.h>
-
 mut_test(mut_test_1) {
   mut_assert(5 != 5);
   mut_assert(5.5 != 5.5);

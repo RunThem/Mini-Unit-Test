@@ -15,7 +15,7 @@ extern "C" {
 #define __color_size  (strlen(__grey("")))
 
 #define __prompt      "************************************************************************"
-#define __prompt_size (sizeof(__prompt) - 1)
+#define __prompt_size (strlen(__prompt))
 
 #define __fmt(buf, fmt, ...) snprintf(buf, sizeof(buf), fmt, ##__VA_ARGS__)
 #define __dis(fmt, ...)      fprintf(stderr, fmt "\n", ##__VA_ARGS__)
