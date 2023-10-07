@@ -34,9 +34,8 @@ typedef struct {
     }                                                                                              \
   } while (0)
 
-#define mut_test(func)   void func(__mut_result_t* result)
-#define mut_group(func)  void func(__mut_result_t* result)
-#define mut_extern(func) extern void func(__mut_result_t*)
+#define mut_test(func)  void func(__mut_result_t* result)
+#define mut_group(func) void func(__mut_result_t* result)
 
 #define mut_init(msg)                                                                              \
   __mut_result_t result = {0};                                                                     \
@@ -46,6 +45,8 @@ typedef struct {
   __dis(__prompt);
 
 #define mut_add_test(func, comment)                                                                \
+  extern void func(__mut_result_t*);                                                               \
+                                                                                                   \
   do {                                                                                             \
     __mut_result_t __result = {0};                                                                 \
                                                                                                    \
@@ -62,6 +63,8 @@ typedef struct {
   } while (0)
 
 #define mut_add_group(func, comment)                                                               \
+  extern void func(__mut_result_t*);                                                               \
+                                                                                                   \
   do {                                                                                             \
     __mut_result_t __result = {0};                                                                 \
                                                                                                    \

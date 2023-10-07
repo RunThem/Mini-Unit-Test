@@ -34,8 +34,6 @@ mut_group(mut_group_2) {
   mut_add_test(mut_test_4, "example 4");
 }
 
-mut_extern(mut_tests);
-
 int main(int argc, char* argv[]) {
   mut_init("Mini-Unit-Test");
 
